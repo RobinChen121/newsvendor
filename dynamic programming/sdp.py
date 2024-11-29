@@ -17,7 +17,6 @@ Created on Thu Nov 28 00:00:35 2024
 import scipy.stats as sp
 from dataclasses import dataclass
 from functools import lru_cache
-from functools import partial
 import time
 
 
@@ -77,7 +76,6 @@ class StochasticInventory:
     max_inventory: float
     min_inventory: float
     pmf: [[[]]]
-    parallel: bool = False
     cache_actions = {}
        
 
@@ -140,15 +138,14 @@ class StochasticInventory:
 
 demands = [10, 20, 10, 20]
 distribution_type = 'poisson'
-capacity = 100
+capacity = 100 # maximum ordering quantity
 fixOrderCost = 0
 variOderCost = 1
 holdCost = 2
 penaCost = 10
-truncQuantile = 0.9999
-maxI = 500
-minI = -300
-parallel = True
+truncQuantile = 0.9999 # trancated quantile for the demand distribution
+maxI = 500 # maximum possible inventory
+minI = -300 # minimum possible inventory
 
 pmf = Pmf(truncQuantile, distribution_type).get_pmf(demands)
 T = len(demands)
@@ -160,8 +157,7 @@ if __name__ == '__main__':
         capacity, fixOrderCost, variOderCost,
         holdCost, penaCost, truncQuantile,
         maxI, minI,
-        pmf,
-        parallel
+        pmf
         )
     
     ini_state = State(1, 0)
